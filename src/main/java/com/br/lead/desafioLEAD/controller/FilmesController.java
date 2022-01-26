@@ -72,7 +72,7 @@ public class FilmesController {
 			return ResponseEntity.created(uri).body(new FilmeDto(filme));
 			
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.badRequest().build();
 		
 	}
 	

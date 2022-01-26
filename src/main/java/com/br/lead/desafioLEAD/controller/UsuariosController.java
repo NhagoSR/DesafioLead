@@ -50,11 +50,17 @@ public class UsuariosController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<UsuarioDto> cadastrar(@RequestBody @Valid UsuarioForm form, UriComponentsBuilder uriBuilder) {		
-		Usuario usuario = form.converter(usuarioRepository);
-		usuarioRepository.save(usuario);
+		Optional<Usuario> emailUsuario = usuarioRepository.findByEmail(form.getEmail());
 		
-		URI uri = uriBuilder.path("/usuario/{id}").buildAndExpand(usuario.getId()).toUri();
-		return ResponseEntity.created(uri).body(new UsuarioDto(usuario));
+		if (!emailUsuario.isPresent()) {
+			Usuario usuario = form.converter(usuarioRepository);
+			usuarioRepository.save(usuario);
+			
+			URI uri = uriBuilder.path("/usuario/{id}").buildAndExpand(usuario.getId()).toUri();
+			return ResponseEntity.created(uri).body(new UsuarioDto(usuario));
+		} 
+		return ResponseEntity.badRequest().build();
+		
 	}
 	
 	@PutMapping("/{id}")
