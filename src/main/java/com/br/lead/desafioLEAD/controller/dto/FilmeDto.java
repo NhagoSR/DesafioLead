@@ -7,9 +7,10 @@ import java.util.stream.Collectors;
 import com.br.lead.desafioLEAD.model.Categoria;
 import com.br.lead.desafioLEAD.model.Estudio;
 import com.br.lead.desafioLEAD.model.Filme;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FilmeDto {
-	
+	@JsonProperty("_id")
 	private int id;
 	private String titulo;
 	private String sinopse;

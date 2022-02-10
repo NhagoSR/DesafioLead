@@ -26,7 +26,7 @@ import com.br.lead.desafioLEAD.model.Categoria;
 import com.br.lead.desafioLEAD.repository.CategoriaRepository;
 
 @RestController
-@RequestMapping("/categorias")
+@RequestMapping("/api/categorias")
 public class CategoriasController {
 	@Autowired
 	private CategoriaRepository categoriaRepository;

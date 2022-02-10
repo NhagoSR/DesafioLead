@@ -26,7 +26,7 @@ import com.br.lead.desafioLEAD.model.Estudio;
 import com.br.lead.desafioLEAD.repository.EstudioRepository;
 
 @RestController
-@RequestMapping("/estudios")
+@RequestMapping("/api/estudios")
 public class EstudiosController {
 	
 	@Autowired

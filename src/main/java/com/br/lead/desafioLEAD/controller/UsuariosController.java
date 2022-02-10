@@ -26,7 +26,7 @@ import com.br.lead.desafioLEAD.model.Usuario;
 import com.br.lead.desafioLEAD.repository.UsuarioRepository;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/api/usuarios")
 public class UsuariosController {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
