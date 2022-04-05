@@ -6,6 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.br.lead.desafioLEAD.model.Usuario;
 import com.br.lead.desafioLEAD.repository.UsuarioRepository;
@@ -37,7 +38,7 @@ public class UsuarioForm {
 		return senha;
 	}
 	public void setSenha(String senha) {
-		this.senha = senha;
+		this.senha = new BCryptPasswordEncoder().encode(senha);
 	}
 	public int getIdade() {
 		return idade;
