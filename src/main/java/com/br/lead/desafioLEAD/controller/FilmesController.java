@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -43,10 +44,97 @@ public class FilmesController {
 	private EstudioRepository estudioRepository;
 	
 	@GetMapping
-	public List<FilmeDto> lista(String nomeCategoria){
+	public List<FilmeDto> lista(){
 			List<Filme> filmes = filmeRepository.findAll();
 			return FilmeDto.converter(filmes);
 		
+	}
+	
+	@GetMapping("/filterTitulo")
+	public List<FilmeDto> filmeByTitulo(@RequestParam("titulo") String titulo){
+		List<Filme> filme = filmeRepository.findByTituloContainingIgnoreCase(titulo);
+		return FilmeDto.converter(filme);
+	}
+	
+	@GetMapping("/filterCategoria") 
+	public List<FilmeDto> filmeByCategoriaId(@RequestParam(required = false, name = "categoria", defaultValue = "0") int categoria_id) { 
+		if(categoria_id != 0) {
+			List<Filme> filme = filmeRepository.findByCategoria_id(categoria_id); 
+			return FilmeDto.converter(filme); 
+		}
+		return lista();
+	}
+	
+	@GetMapping("/filterEstudio") 
+	public List<FilmeDto> filmeByEstudioId(@RequestParam(required = false, name = "estudio", defaultValue = "0") int estudio_id) {
+		if(estudio_id != 0) {
+			List<Filme> filme = filmeRepository.findByEstudio_id(estudio_id);
+			return FilmeDto.converter(filme);
+		}
+		return lista();
+	}
+	
+	@GetMapping("/filterCategoriaEstudio") 
+	public List<FilmeDto> filmeByCategoriaIdEstudioId(@RequestParam(required = false, name = "categoria") int categoria_id, 
+			@RequestParam(required = false, name = "estudio", defaultValue = "0") int estudio_id) {
+		List<Filme> filme;
+		
+		if(categoria_id != 0 && estudio_id != 0) {
+			filme = filmeRepository.findByCategoria_idAndEstudio_id(categoria_id, estudio_id);
+			return FilmeDto.converter(filme);
+			
+		} else if(categoria_id == 0 && estudio_id != 0) {
+			filme = filmeRepository.findByEstudio_id(estudio_id);
+			return FilmeDto.converter(filme);
+			
+		} else if(categoria_id != 0 && estudio_id == 0) {
+			filme = filmeRepository.findByCategoria_id(categoria_id);
+			return FilmeDto.converter(filme);
+		}
+		
+		return lista();
+	}
+	
+	@GetMapping("/filterTituloCategoriaEstudio") 
+	public List<FilmeDto> filmeByTituloCategoriaIdEstudioId(
+			@RequestParam(required = false, name = "titulo") String titulo, 
+			@RequestParam(required = false, name = "categoria", defaultValue = "0") int categoria_id,
+			@RequestParam(required = false, name = "estudio", defaultValue = "0") int estudio_id) { 
+		List<Filme> filme;
+		
+		if(titulo.length() > 0 && categoria_id != 0 && estudio_id != 0) {
+			filme = filmeRepository.findByTituloContainingIgnoreCaseAndCategoria_idAndEstudio_id(titulo, categoria_id, estudio_id); 
+			return FilmeDto.converter(filme); 
+			
+		} else if (titulo.length() > 0 && categoria_id == 0 && estudio_id == 0) {
+			filme = filmeRepository.findByTituloContainingIgnoreCase(titulo);
+			return FilmeDto.converter(filme);
+			
+		} else if (titulo.length() > 0 && estudio_id != 0) {
+			filme = filmeRepository.findByTituloContainingIgnoreCaseAndEstudio_id(titulo, estudio_id);
+			return FilmeDto.converter(filme); 
+		
+		} else if (titulo.length() > 0 && categoria_id != 0) {
+			filme = filmeRepository.findByTituloContainingIgnoreCaseAndCategoria_id(titulo, categoria_id);
+			return FilmeDto.converter(filme);
+			
+		} else if(estudio_id == 0 && categoria_id != 0) {
+			filme = filmeRepository.findByCategoria_id(categoria_id);
+			return FilmeDto.converter(filme); 
+			
+		} else if(categoria_id == 0 && estudio_id != 0) {
+			filme = filmeRepository.findByEstudio_id(estudio_id);
+			return FilmeDto.converter(filme); 
+			
+		} else if (categoria_id != 0 && estudio_id != 0) {
+			filme = filmeRepository.findByCategoria_idAndEstudio_id(categoria_id, estudio_id);
+			return FilmeDto.converter(filme);
+			
+		} else if(categoria_id == 0 && estudio_id == 0) {
+			return lista();
+		}
+		
+		return lista();
 	}
 	
 	@GetMapping("/{id}")

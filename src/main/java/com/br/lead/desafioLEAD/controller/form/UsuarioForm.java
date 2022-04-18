@@ -23,7 +23,6 @@ public class UsuarioForm {
 	private String email;
 	@NotNull 
 	private LocalDate data_nascimento;
-	@NotNull 
 	private Boolean privilegios_adm;
 	
 	
@@ -65,7 +64,7 @@ public class UsuarioForm {
 		return privilegios_adm;
 	}
 	public void setPrivilegios_adm(Boolean privilegios_adm) {
-		this.privilegios_adm = privilegios_adm;
+		this.privilegios_adm = true;
 	}
 
 	public Usuario converter(UsuarioRepository usuarioRepository) {
